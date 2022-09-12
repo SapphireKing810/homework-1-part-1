@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         String[] fileNames = {"prototype-ordered.txt", "prototype-reverse.txt", "prototype-random01.txt"};
         Integer[] numberSelection;
-        ArrayList<Integer> listOfNumbers = new ArrayList<Integer>();
+        ArrayList<Integer> listOfNumbers = new ArrayList<Integer>(); //I was just added through laptop
         //for each fileName in FileNames
         for (String fileName : fileNames) {
             File file = new File(fileName);
