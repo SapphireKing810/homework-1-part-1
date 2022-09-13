@@ -5,53 +5,97 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
-        String[] fileNames = {"prototype-ordered.txt", "prototype-reverse.txt", "prototype-random01.txt"};
-        Integer[] numberSelection;
-        ArrayList<Integer> listOfNumbers = new ArrayList<Integer>(); //I was just added through laptop
-        //for each fileName in FileNames
-        for (String fileName : fileNames) {
-            File file = new File(fileName);
+        String[] prototypeInputPaths = {"prototype-ordered.txt", "prototype-reverse.txt", "prototype-random01.txt"};
+        String[] largeInputPaths = {"large-ordered.txt", "large-reverse.txt", "large-random01.txt"};
+
+        int[]   prototypeWorstCase = new int[16];
+        int[]   prototypeBestCase = new int[16];
+        int[]   prototypeAverageCase = new int[16];
+
+        int[]   largeWorstCase = new int[2000];
+        int[]   largeBestCase = new int[2000];
+        int[]   largeAverageCase = new int[2000];
+
+        for (int i = 0; i < 3; i++){
+            File file = new File(prototypeInputPaths[i]);
             Scanner scanner = new Scanner(file);
+            for (int j = 0; j < 16; j++){
+                if(i == 0){
+                    if (j == 0)
+                        System.out.println("Best case data set: ");
+                    prototypeBestCase[j] = scanner.nextInt();
+                    System.out.println("Index: " + j + " number: " + prototypeBestCase[j]);
+                } else if (i == 1) {
+                    if (j == 0)
+                        System.out.println("Worst case data set: ");
+                    prototypeWorstCase[j] = scanner.nextInt();
+                    System.out.println("Index: " + j + " number: " + prototypeWorstCase[j]);
+                } else if (i == 2) {
+                    if (j == 0)
+                        System.out.println("Average case data set: ");
+                    prototypeAverageCase[j] = scanner.nextInt();
+                    System.out.println("Index: " + j + " number: " + prototypeAverageCase[j]);
+                }
 
-            while (scanner.hasNextInt()) {
-                listOfNumbers.add(scanner.nextInt());
             }
-            numberSelection = listOfNumbers.toArray(new Integer[0]);
-            System.out.println(" ========================= ");
-            System.out.println("Testing selection sort: ");
-            if (fileName == fileNames[0]) {
-                System.out.println(" --- best case ---");
-                selectionSort(numberSelection);
-            } else if (fileName == fileNames[1]) {
-                System.out.println(" --- worst case ---");
-                selectionSort(numberSelection);
-            } else if (fileName == fileNames[2]) {
-                System.out.println(" --- avarage case ---");
-                selectionSort(numberSelection);
-            }
-            System.out.println(" ========================= ");
-            System.out.println(listOfNumbers);
+            System.out.println("");
+        }
+        for (int i = 0; i < 3; i++){
+            File file = new File(largeInputPaths[i]);
+            Scanner scanner = new Scanner(file);
+            for (int j = 0; j < 2000; j++){
+                if(i == 0){
+                    if (j == 0)
+                        System.out.println("Best case data set: ");
+                    largeBestCase[j] = scanner.nextInt();
+                    System.out.println("Index: " + j + " number: " + largeBestCase[j]);
+                } else if (i == 1) {
+                    if (j == 0)
+                        System.out.println("Worst case data set: ");
+                    largeWorstCase[j] = scanner.nextInt();
+                    System.out.println("Index: " + j + " number: " + largeWorstCase[j]);
+                } else if (i == 2) {
+                    if (j == 0)
+                        System.out.println("Average case data set: ");
+                    largeAverageCase[j] = scanner.nextInt();
+                    System.out.println("Index: " + j + " number: " + largeAverageCase[j]);
+                }
 
-            listOfNumbers.clear();
-        } //end for loop
+            }
+            System.out.println("");
+        }
+
+        System.out.println(" ========================= ");
+        System.out.println("Testing selection sort: ");
+        System.out.println(" --- best case ---");
+        selectionSort(prototypeBestCase);
+        System.out.println(" --- worst case ---");
+        selectionSort(prototypeWorstCase);
+        System.out.println(" --- avarage case ---");
+        selectionSort(prototypeAverageCase);
+        System.out.println(" ========================= ");
+
     }
-        public static void selectionSort(Integer[] array) {
+        public static void selectionSort(int[] array) {
             int temp, min, exchanges = 0, comparisons = 0;
-            int numberOfItems = array.length;
-            for (int pass=0; pass != numberOfItems - 1; pass++) {
-                min = pass;
-                for (int index = pass+1; index != numberOfItems; index++) {
-                    comparisons++;
-                    if (array[index] < array[min])
-                        min = index;
-                } // end inner loop
-                temp = array[min];
-                array[min] = array[pass];
-                array[pass] = temp;
-                exchanges++;
+            int n = array.length;
 
+            for (int i = 0; i < n-1; i++) {
+                    min = i;
+                    for (int j = i + 1; j < n; j++) {
+                        comparisons++;
+                        if (array[j] < array[min]) {
+                            min = j;
 
-            } // end outer loop
+                        }
+                    } // end inner loop
+                    if(min != i){
+                        temp = array[min];
+                        array[min] = array[i];
+                        array[i] = temp;
+                        exchanges++;
+                    }
+            }// end outer loop
             System.out.println("Selection Sort: Number of Exchanges: " +
                     exchanges);
             System.out.println("Selection Sort: Number of Comparisons: " +
@@ -62,8 +106,7 @@ public class Main {
             System.out.println ();
         } // end selection sort
     public static void bubbleSort(int[] array){
-
-        int temp, comparisons = 0, swaps = 0, n = array.length;
+        int temp, comparisons = 0, exchanges = 0, n = array.length;
         boolean isSorted;
 
         for(int i = 1; i != n; i++){
@@ -75,7 +118,7 @@ public class Main {
                     array[j] = array[j+1];
                     array[j+1] = temp;
                     isSorted = false;
-                    swaps++;
+                    exchanges++;
                 }
             }// end inner loop
             if(isSorted)
@@ -83,7 +126,7 @@ public class Main {
         } // end outer loop
 
         System.out.println("Bubble Sort: Number of Exchanges: " +
-                swaps);
+                exchanges);
         System.out.println("Bubble Sort: Number of Comparisons: " +
                 comparisons);
         System.out.println ("Sorted file:");
@@ -91,7 +134,7 @@ public class Main {
         System.out.println ();
     }// end bubble sort
 
-    public static void insertionSort(int[]array){
+    public static void insertionSort(int[] array){
         //                 Comparisons      Exchanges
         //Best Case     |   O(n)        |   O(1)
         //Worst Case    |   O(n^2)      |   O(n^2)
@@ -101,7 +144,7 @@ public class Main {
         for(int i = 1; i < array.length; i++){
             temp = array[i];
             int j = i - 1;
-            //noinspection ReassignedVariable
+
             bestCaseComparison++;
             while(j >= 0 && array[j] > temp){
                 comparisons++;
