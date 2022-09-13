@@ -64,15 +64,60 @@ public class Main {
             }
             System.out.println("");
         }
-
+        System.out.println("Prototype Data Sets");
         System.out.println(" ========================= ");
         System.out.println("Testing selection sort: ");
         System.out.println(" --- best case ---");
-        selectionSort(prototypeBestCase);
+        selectionSort(prototypeBestCase.clone());
         System.out.println(" --- worst case ---");
-        selectionSort(prototypeWorstCase);
-        System.out.println(" --- avarage case ---");
-        selectionSort(prototypeAverageCase);
+        selectionSort(prototypeWorstCase.clone());
+        System.out.println(" --- average case ---");
+        selectionSort(prototypeAverageCase.clone());
+        System.out.println(" ========================= ");
+        System.out.println("Testing bubble sort: ");
+        System.out.println(" --- best case ---");
+        bubbleSort(prototypeBestCase.clone());
+        System.out.println(" --- worst case ---");
+        bubbleSort(prototypeWorstCase.clone());
+        System.out.println(" --- average case ---");
+        bubbleSort(prototypeAverageCase.clone());
+        System.out.println(" ========================= ");
+        System.out.println("Testing insertion sort: ");
+        System.out.println(" --- best case ---");
+        insertionSort(prototypeBestCase.clone());
+        System.out.println(" --- worst case ---");
+        insertionSort(prototypeWorstCase.clone());
+        System.out.println(" --- average case ---");
+        insertionSort(prototypeAverageCase.clone());
+        System.out.println(" ========================= ");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("Large Data Sets");
+        System.out.println(" ========================= ");
+        System.out.println("Testing selection sort: ");
+        System.out.println(" --- best case ---");
+        selectionSort(largeBestCase.clone());
+        System.out.println(" --- worst case ---");
+        selectionSort(largeWorstCase.clone());
+        System.out.println(" --- average case ---");
+        selectionSort(largeAverageCase.clone());
+        System.out.println(" ========================= ");
+        System.out.println("Testing bubble sort: ");
+        System.out.println(" --- best case ---");
+        bubbleSort(largeBestCase.clone());
+        System.out.println(" --- worst case ---");
+        bubbleSort(largeWorstCase.clone());
+        System.out.println(" --- average case ---");
+        bubbleSort(largeAverageCase.clone());
+        System.out.println(" ========================= ");
+        System.out.println("Testing insertion sort: ");
+        System.out.println(" --- best case ---");
+        insertionSort(largeBestCase.clone());
+        System.out.println(" --- worst case ---");
+        insertionSort(largeWorstCase.clone());
+        System.out.println(" --- average case ---");
+        insertionSort(largeAverageCase.clone());
         System.out.println(" ========================= ");
 
     }
@@ -86,7 +131,6 @@ public class Main {
                         comparisons++;
                         if (array[j] < array[min]) {
                             min = j;
-
                         }
                     } // end inner loop
                     if(min != i){
@@ -94,7 +138,7 @@ public class Main {
                         array[min] = array[i];
                         array[i] = temp;
                         exchanges++;
-                    }
+                   }
             }// end outer loop
             System.out.println("Selection Sort: Number of Exchanges: " +
                     exchanges);
@@ -140,19 +184,22 @@ public class Main {
         //Worst Case    |   O(n^2)      |   O(n^2)
         //Avg Case      |   O(n^2)      |   O(n^2)
         int temp, comparisons = 0, exchanges = 0, bestCaseComparison = 0;
+        System.out.print("Unsorted Array: ");
+        for (int k : array) System.out.print(k + " ");
+        System.out.println("");
 
-        for(int i = 1; i < array.length; i++){
+        for(int i = 2; i < array.length; i++){
             temp = array[i];
             int j = i - 1;
-
             bestCaseComparison++;
             while(j >= 0 && array[j] > temp){
-                comparisons++;
-                array[j+1] = array[j];
+                array[j + 1] = array[j];
                 j--;
                 exchanges++;
+                comparisons++;
             } //end while loop
             array[j+1] = temp;
+
         } //end loop
         System.out.println("Insertion Sort: Number of Exchanges: " +
                 exchanges);
