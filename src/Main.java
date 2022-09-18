@@ -1,15 +1,14 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.io.*;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException {
-        String[] prototypeInputPaths = {"prototype-ordered.txt", "prototype-reverse.txt", "prototype-random02.txt"};
-        String[] largeInputPaths = {"large-ordered.txt", "large-reverse.txt", "large-random01.txt"};
+    public static void main(String[] args) throws IOException {
         int prototypeDataLength = 16;
         int largeDataLength = 2000;
+        String[] prototypeInputPaths = {"prototype-ordered.txt", "prototype-reverse.txt", "prototype-random03.txt"};
+        String[] largeInputPaths = {"large-ordered.txt", "large-reverse.txt", "large-random03.txt"};
 
+        //initialize the arrays
         int[]   prototypeWorstCase = new int[prototypeDataLength];
         int[]   prototypeBestCase = new int[prototypeDataLength];
         int[]   prototypeAverageCase = new int[prototypeDataLength];
@@ -18,54 +17,16 @@ public class Main {
         int[]   largeBestCase = new int[largeDataLength];
         int[]   largeAverageCase = new int[largeDataLength];
 
-        for (int i = 0; i < prototypeInputPaths.length; i++){
-            File file = new File(prototypeInputPaths[i]);
-            Scanner scanner = new Scanner(file);
-            for (int j = 0; j < prototypeDataLength; j++){
-                if(i == 0){
-                    if (j == 0)
-                        System.out.println("Best case data set: ");
-                    prototypeBestCase[j] = scanner.nextInt();
-                    System.out.println("Index: " + j + " number: " + prototypeBestCase[j]);
-                } else if (i == 1) {
-                    if (j == 0)
-                        System.out.println("Worst case data set: ");
-                    prototypeWorstCase[j] = scanner.nextInt();
-                    System.out.println("Index: " + j + " number: " + prototypeWorstCase[j]);
-                } else if (i == 2) {
-                    if (j == 0)
-                        System.out.println("Average case data set: ");
-                    prototypeAverageCase[j] = scanner.nextInt();
-                    System.out.println("Index: " + j + " number: " + prototypeAverageCase[j]);
-                }
-            }
-            System.out.println("");
-        }
+        //populate the arrays
+        populateArray(prototypeInputPaths[0], prototypeBestCase);
+        populateArray(prototypeInputPaths[1], prototypeWorstCase);
+        populateArray(prototypeInputPaths[2], prototypeAverageCase);
 
-        for (int i = 0; i < largeInputPaths.length; i++){
-            File file = new File(largeInputPaths[i]);
-            Scanner scanner = new Scanner(file);
-            for (int j = 0; j < largeDataLength; j++){
-                if(i == 0){
-                    if (j == 0)
-                        System.out.println("Best case data set: ");
-                    largeBestCase[j] = scanner.nextInt();
-                    System.out.println("Index: " + j + " number: " + largeBestCase[j]);
-                } else if (i == 1) {
-                    if (j == 0)
-                        System.out.println("Worst case data set: ");
-                    largeWorstCase[j] = scanner.nextInt();
-                    System.out.println("Index: " + j + " number: " + largeWorstCase[j]);
-                } else if (i == 2) {
-                    if (j == 0)
-                        System.out.println("Average case data set: ");
-                    largeAverageCase[j] = scanner.nextInt();
-                    System.out.println("Index: " + j + " number: " + largeAverageCase[j]);
-                }
+        populateArray(largeInputPaths[0], largeBestCase);
+        populateArray(largeInputPaths[1], largeWorstCase);
+        populateArray(largeInputPaths[2], largeAverageCase);
 
-            }
-            System.out.println("");
-        }
+
         System.out.println("Prototype Data Sets");
         System.out.println(" ========================= ");
         System.out.println("Testing selection sort: ");
@@ -121,13 +82,56 @@ public class Main {
         System.out.println(" --- average case ---");
         insertionSort(largeAverageCase.clone());
         System.out.println(" ========================= ");
-
+        writeFile(prototypeInputPaths[0], prototypeBestCase);
     }
-        public static void selectionSort(int[] array) {
+
+    public static void populateArray(String path, int[] array) throws FileNotFoundException {
+            File file = new File(path);
+            Scanner scanner = new Scanner(file);
+
+            System.out.println(path + " data set: "); //debug
+            for (int j = 0; j < array.length; j++){
+                array[j] = scanner.nextInt();
+                System.out.println("Index: " + j + " number: " + array[j]); //debug
+            }
+    }
+
+    public static void writeFile(String path, int[] array) {
+        Scanner scanner = new Scanner(System.in);
+
+        try{
+            File file = new File("output-" + path);
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file.getName(), true));
+            if(file.exists())
+            {
+                System.out.println("File already exist. Would you like to delete file and append to current?(y/n)");
+                String input = scanner.nextLine();
+                if (input == "y" || input == "Y")
+                {
+                    file.delete();
+                }
+
+            }
+            else
+            {
+                for (int i = 0;i < array.length; i++){
+                    //writer.write("Hello");
+                    writer.write(array[i] + "\n");
+                }
+            }
+
+            writer.close();
+            //System.out.println(file.getName() + " file created.");
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void selectionSort(int[] array) {
             int temp, min, exchanges = 0, comparisons = 0;
             int n = array.length;
 
-            for (int i = 0; i < n-1; i++) {
+            for (int i = 0; i < n; i++) {
                     min = i;
                     for (int j = i + 1; j < n; j++) {
                         comparisons++;
