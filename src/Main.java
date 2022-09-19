@@ -2,9 +2,10 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         int prototypeDataLength = 16;
         int largeDataLength = 2000;
+
         String[] prototypeInputPaths = {"prototype-ordered.txt", "prototype-reverse.txt", "prototype-random03.txt"};
         String[] largeInputPaths = {"large-ordered.txt", "large-reverse.txt", "large-random03.txt"};
 
@@ -85,7 +86,8 @@ public class Main {
         writeFile(prototypeInputPaths[0], prototypeBestCase);
     }
 
-    public static void populateArray(String path, int[] array) throws FileNotFoundException {
+    public static void populateArray(String path, int[] array) {
+        try{
             File file = new File(path);
             Scanner scanner = new Scanner(file);
 
@@ -94,23 +96,26 @@ public class Main {
                 array[j] = scanner.nextInt();
                 System.out.println("Index: " + j + " number: " + array[j]); //debug
             }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static void writeFile(String path, int[] array) {
-        Scanner scanner = new Scanner(System.in);
+
 
         try{
+            Scanner scanner = new Scanner(System.in);
             File file = new File("output-" + path);
             BufferedWriter writer = new BufferedWriter(new FileWriter(file.getName(), true));
             if(file.exists())
             {
-                System.out.println("File already exist. Would you like to delete file and append to current?(y/n)");
+                System.out.println("File already exist. Overwrite file?(y/n)");
                 String input = scanner.nextLine();
                 if (input == "y" || input == "Y")
                 {
                     file.delete();
                 }
-
             }
             else
             {
