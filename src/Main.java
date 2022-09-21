@@ -1,166 +1,89 @@
 import java.io.*;
 import java.util.Scanner;
-
 public class Main {
-    public static void main(String[] args) {
-        int prototypeDataLength = 16;
-        int largeDataLength = 2000;
+    public static void main(String[] args) throws Exception {
+        Scanner inputScanner = new Scanner(System.in);
+        String fileName = null;
+        int length;
 
-        String[] prototypeInputPaths = {"prototype-ordered.txt", "prototype-reverse.txt", "prototype-random03.txt"};
-        String[] largeInputPaths = {"large-ordered.txt", "large-reverse.txt", "large-random03.txt"};
+        System.out.print("Please enter the size the input: ");
+        length = Integer.parseInt(inputScanner.nextLine());
+        System.out.println("The size of data is: " + length);
+        int[] data = new int[length];
 
-        //initialize the arrays
-        int[]   prototypeWorstCase = new int[prototypeDataLength];
-        int[]   prototypeBestCase = new int[prototypeDataLength];
-        int[]   prototypeAverageCase = new int[prototypeDataLength];
-
-        int[]   largeWorstCase = new int[largeDataLength];
-        int[]   largeBestCase = new int[largeDataLength];
-        int[]   largeAverageCase = new int[largeDataLength];
-
-        //populate the arrays
-        populateArray(prototypeInputPaths[0], prototypeBestCase);
-        populateArray(prototypeInputPaths[1], prototypeWorstCase);
-        populateArray(prototypeInputPaths[2], prototypeAverageCase);
-
-        populateArray(largeInputPaths[0], largeBestCase);
-        populateArray(largeInputPaths[1], largeWorstCase);
-        populateArray(largeInputPaths[2], largeAverageCase);
-
-
-        System.out.println("Prototype Data Sets");
-        System.out.println(" ========================= ");
-        System.out.println("Testing selection sort: ");
-        System.out.println(" --- best case ---");
-        selectionSort(prototypeBestCase.clone());
-        System.out.println(" --- worst case ---");
-        selectionSort(prototypeWorstCase.clone());
-        System.out.println(" --- average case ---");
-        selectionSort(prototypeAverageCase.clone());
-        System.out.println(" ========================= ");
-        System.out.println("Testing bubble sort: ");
-        System.out.println(" --- best case ---");
-        bubbleSort(prototypeBestCase.clone());
-        System.out.println(" --- worst case ---");
-        bubbleSort(prototypeWorstCase.clone());
-        System.out.println(" --- average case ---");
-        bubbleSort(prototypeAverageCase.clone());
-        System.out.println(" ========================= ");
-        System.out.println("Testing insertion sort: ");
-        System.out.println(" --- best case ---");
-        insertionSort(prototypeBestCase.clone());
-        System.out.println(" --- worst case ---");
-        insertionSort(prototypeWorstCase.clone());
-        System.out.println(" --- average case ---");
-        insertionSort(prototypeAverageCase.clone());
-        System.out.println(" ========================= ");
-        System.out.println("");
-        System.out.println("");
-        System.out.println("");
-        System.out.println("Large Data Sets");
-        System.out.println(" ========================= ");
-        System.out.println("Testing selection sort: ");
-        System.out.println(" --- best case ---");
-        selectionSort(largeBestCase.clone());
-        System.out.println(" --- worst case ---");
-        selectionSort(largeWorstCase.clone());
-        System.out.println(" --- average case ---");
-        selectionSort(largeAverageCase.clone());
-        System.out.println(" ========================= ");
-        System.out.println("Testing bubble sort: ");
-        System.out.println(" --- best case ---");
-        bubbleSort(largeBestCase.clone());
-        System.out.println(" --- worst case ---");
-        bubbleSort(largeWorstCase.clone());
-        System.out.println(" --- average case ---");
-        bubbleSort(largeAverageCase.clone());
-        System.out.println(" ========================= ");
-        System.out.println("Testing insertion sort: ");
-        System.out.println(" --- best case ---");
-        insertionSort(largeBestCase.clone());
-        System.out.println(" --- worst case ---");
-        insertionSort(largeWorstCase.clone());
-        System.out.println(" --- average case ---");
-        insertionSort(largeAverageCase.clone());
-        System.out.println(" ========================= ");
-        writeFile(prototypeInputPaths[0], prototypeBestCase);
-    }
-
-    public static void populateArray(String path, int[] array) {
-        try{
-            File file = new File(path);
-            Scanner scanner = new Scanner(file);
-
-            System.out.println(path + " data set: "); //debug
-            for (int j = 0; j < array.length; j++){
-                array[j] = scanner.nextInt();
-                System.out.println("Index: " + j + " number: " + array[j]); //debug
+        while(fileName == null){
+            System.out.print("Please type the name of file to be sorted: ");
+            fileName = inputScanner.nextLine();
+            System.out.println("file name: " + fileName);
+            if(!fileName.matches("(.*).txt")){ //basic error handling
+                fileName = null;
+                System.out.println("ERROR: Please add \".txt\" file extension to the file name.");
             }
-        }catch (Exception e){
-            e.printStackTrace();
+        }
+
+        //populates the array
+        populateArray(fileName, data);
+
+        //clone array as not to reference
+        System.out.println(fileName);
+        bubbleSort(fileName, data.clone());
+        selectionSort(fileName, data.clone());
+        insertionSort(fileName, data.clone());
+    }
+    public static void populateArray(String path, int[] array) throws Exception {
+        File file = new File(path);
+        Scanner scanner = new Scanner(file);
+
+        System.out.println(path + " data set: "); //debug
+
+        for (int j = 0; j < array.length; j++){
+            array[j] = scanner.nextInt();
+            System.out.println("Index: " + j + " number: " + array[j]); //debug
         }
     }
-
     public static void writeFile(String path, int[] array) {
-
-
         try{
-            Scanner scanner = new Scanner(System.in);
             File file = new File("output-" + path);
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file.getName(), true));
-            if(file.exists())
-            {
-                System.out.println("File already exist. Overwrite file?(y/n)");
-                String input = scanner.nextLine();
-                if (input == "y" || input == "Y")
-                {
-                    file.delete();
-                }
-            }
-            else
-            {
-                for (int i = 0;i < array.length; i++){
-                    //writer.write("Hello");
-                    writer.write(array[i] + "\n");
-                }
-            }
+            FileWriter fWriter = new FileWriter(file); //will override current file if the file already exist
+            PrintWriter pWriter = new PrintWriter(fWriter);
 
-            writer.close();
-            //System.out.println(file.getName() + " file created.");
-        } catch (IOException e){
+            for (int j : array) {
+                pWriter.println(j);
+            } //end for
+
+            pWriter.close();
+        } catch (Exception e){
             e.printStackTrace();
-        }
-    }
+        } // end try-catch
+    } // end write file
+    public static void selectionSort(String fileName, int[] array) {
+        int temp, min, exchanges = 0, comparisons = 0;
+        int n = array.length;
 
-    public static void selectionSort(int[] array) {
-            int temp, min, exchanges = 0, comparisons = 0;
-            int n = array.length;
+        for (int i = 0; i < n-1; i++) {
+                min = i;
+                for (int j = i + 1; j < n; j++) {
+                    comparisons++;
+                    if (array[j] < array[min]) {
+                        min = j;
+                    } //end if
+                } // end inner loop
+                //if(min != i){
+                    temp = array[min];
+                    array[min] = array[i];
+                    array[i] = temp;
+                    exchanges++;
+               // } //end if
+        }// end outer loop
 
-            for (int i = 0; i < n; i++) {
-                    min = i;
-                    for (int j = i + 1; j < n; j++) {
-                        comparisons++;
-                        if (array[j] < array[min]) {
-                            min = j;
-                        }
-                    } // end inner loop
-                    if(min != i){
-                        temp = array[min];
-                        array[min] = array[i];
-                        array[i] = temp;
-                        exchanges++;
-                   }
-            }// end outer loop
-            System.out.println("Selection Sort: Number of Exchanges: " +
-                    exchanges);
-            System.out.println("Selection Sort: Number of Comparisons: " +
-                    comparisons);
-            System.out.println ("Sorted file:");
-            for (int i= 0; i < array.length; i++)
-                System.out.print (array[i] + " ");
-            System.out.println ();
+        System.out.println("=========================================================");
+        System.out.println("Selection Sort");
+        System.out.println("Number of Exchanges: " + exchanges);
+        System.out.println("Number of Comparisons: " + comparisons);
+        System.out.println("=========================================================");
+        writeFile("selection-" + fileName, array);
         } // end selection sort
-    public static void bubbleSort(int[] array){
+    public static void bubbleSort(String fileName, int[] array){
         int temp, comparisons = 0, exchanges = 0, n = array.length;
         boolean isSorted;
 
@@ -179,26 +102,16 @@ public class Main {
             if(isSorted)
                 break;
         } // end outer loop
-
-        System.out.println("Bubble Sort: Number of Exchanges: " +
-                exchanges);
-        System.out.println("Bubble Sort: Number of Comparisons: " +
-                comparisons);
-        System.out.println ("Sorted file:");
-        for (int j : array) System.out.print(j + " ");
-        System.out.println ();
+        System.out.println("=========================================================");
+        System.out.println("Bubble Sort");
+        System.out.println("Number of Exchanges: " + exchanges);
+        System.out.println("Number of Comparisons: " + comparisons);
+        System.out.println("=========================================================");
+        writeFile("bubble-" + fileName, array);
     }// end bubble sort
-
-    public static void insertionSort(int[] array){
-        //                 Comparisons      Exchanges
-        //Best Case     |   O(n)        |   O(1)
-        //Worst Case    |   O(n^2)      |   O(n^2)
-        //Avg Case      |   O(n^2)      |   O(n^2)
-        int temp, comparisons = 0, exchanges = 0, bestCaseComparison = 0;
+    public static void insertionSort(String fileName, int[] array){
+        int temp, comparisons = 0, exchanges = 0;
         int n = array.length;
-        System.out.print("Unsorted Array: ");
-        for (int k : array) System.out.print(k + " ");
-        System.out.println("");
 
         for(int i = 1; i < n; i++){
             temp = array[i];
@@ -210,14 +123,13 @@ public class Main {
                 comparisons++;
             } //end while loop
             array[j+1] = temp;
-
         } //end loop
-        System.out.println("Insertion Sort: Number of Exchanges: " +
-                exchanges);
-        System.out.println("Insertion Sort: Number of Comparisons: " +
-                comparisons);
-        System.out.println ("Sorted file:");
-        for (int j : array) System.out.print(j + " ");
-        System.out.println ();
-    }
+
+        System.out.println("=========================================================");
+        System.out.println("Insertion Sort");
+        System.out.println("Number of Exchanges: " + exchanges);
+        System.out.println("Number of Comparisons: " + comparisons);
+        System.out.println("=========================================================");
+        writeFile("insertion-" + fileName, array);
+    } //end insertion sort
 }
