@@ -26,10 +26,11 @@ public class Main {
 
         //clone array as not to reference
         System.out.println(fileName);
-        bubbleSort(fileName, data.clone());
-        selectionSort(fileName, data.clone());
+        //bubbleSort(fileName, data.clone());
+        //selectionSort(fileName, data.clone());
         insertionSort(fileName, data.clone());
     }
+
     public static void populateArray(String path, int[] array) throws Exception {
         File file = new File(path);
         Scanner scanner = new Scanner(file);
@@ -56,24 +57,25 @@ public class Main {
             e.printStackTrace();
         } // end try-catch
     } // end write file
+
     public static void selectionSort(String fileName, int[] array) {
-        int temp, min, exchanges = 0, comparisons = 0;
+        int temp, minIndex, exchanges = 0, comparisons = 0;
         int n = array.length;
 
         for (int i = 0; i < n-1; i++) {
-                min = i;
-                for (int j = i + 1; j < n; j++) {
-                    comparisons++;
-                    if (array[j] < array[min]) {
-                        min = j;
-                    } //end if
-                } // end inner loop
-                //if(min != i){
-                    temp = array[min];
-                    array[min] = array[i];
-                    array[i] = temp;
-                    exchanges++;
-               // } //end if
+            minIndex = i;
+            for (int j = i + 1; j < n; j++) {
+                comparisons++;
+                if (array[j] < array[minIndex]) {
+                    minIndex = j;
+                } //end if
+            } // end inner loop
+            if(minIndex != i){
+                temp = array[minIndex];
+                array[minIndex] = array[i];
+                array[i] = temp;
+                exchanges++;
+            } //end if
         }// end outer loop
 
         System.out.println("=========================================================");
@@ -83,6 +85,7 @@ public class Main {
         System.out.println("=========================================================");
         writeFile("selection-" + fileName, array);
         } // end selection sort
+
     public static void bubbleSort(String fileName, int[] array){
         int temp, comparisons = 0, exchanges = 0, n = array.length;
         boolean isSorted;
@@ -109,6 +112,7 @@ public class Main {
         System.out.println("=========================================================");
         writeFile("bubble-" + fileName, array);
     }// end bubble sort
+
     public static void insertionSort(String fileName, int[] array){
         int temp, comparisons = 0, exchanges = 0;
         int n = array.length;
