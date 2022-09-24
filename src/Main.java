@@ -63,6 +63,7 @@ public class Main {
         int n = array.length;
 
         for (int i = 0; i < n-1; i++) {
+<<<<<<< Updated upstream
             minIndex = i;
             for (int j = i + 1; j < n; j++) {
                 comparisons++;
@@ -76,6 +77,21 @@ public class Main {
                 array[i] = temp;
                 exchanges++;
             } //end if
+=======
+                min = i;
+                for (int j = i + 1; j < n; j++) {
+                    comparisons++;
+                    if (array[j] < array[min]) {
+                        min = j;
+                    } //end if
+                } // end inner loop
+                if(min != i){
+                    temp = array[min];
+                    array[min] = array[i];
+                    array[i] = temp;
+                    exchanges++;
+                } //end if
+>>>>>>> Stashed changes
         }// end outer loop
 
         System.out.println("=========================================================");
@@ -90,21 +106,43 @@ public class Main {
         int temp, comparisons = 0, exchanges = 0, n = array.length;
         boolean isSorted;
 
+        //debug prototype-reverse.txt
+        System.out.println("Before: ");
+        for (int k: array) { System.out.print(k + " ");}
+        System.out.println("");
+
+        //Print throughout
         for(int i = 1; i < n; i++){
             isSorted = true;
+            System.out.println("Pass " + i + ": ");
             for(int j = 0; j < n-i; j++){
                 comparisons++;
+                System.out.print("Iteration " + (j+1) + ": ");
                 if(array[j] > array[j+1]){
                     temp = array[j];
                     array[j] = array[j+1];
                     array[j+1] = temp;
                     isSorted = false;
                     exchanges++;
+                    for (int k: array) { System.out.print(k + " ");}
+                    System.out.print(" exchange successful. count = " + exchanges);
+                    System.out.println("");
+                }
+                else {
+                    for (int k: array) { System.out.print(k + " ");}
+                    System.out.print(" no exchange performed.");
+                    System.out.println("");
                 }
             }// end inner loop
+            System.out.println("Current # of comparisons " + comparisons);
             if(isSorted)
                 break;
         } // end outer loop
+        //debug
+        System.out.println("After: ");
+        for (int k: array) { System.out.print(k + " ");}
+        System.out.println("");
+
         System.out.println("=========================================================");
         System.out.println("Bubble Sort");
         System.out.println("Number of Exchanges: " + exchanges);
