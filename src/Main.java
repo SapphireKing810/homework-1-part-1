@@ -63,7 +63,7 @@ public class Main {
         int n = array.length;
 
         for (int i = 0; i < n-1; i++) {
-<<<<<<< Updated upstream
+
             minIndex = i;
             for (int j = i + 1; j < n; j++) {
                 comparisons++;
@@ -77,21 +77,6 @@ public class Main {
                 array[i] = temp;
                 exchanges++;
             } //end if
-=======
-                min = i;
-                for (int j = i + 1; j < n; j++) {
-                    comparisons++;
-                    if (array[j] < array[min]) {
-                        min = j;
-                    } //end if
-                } // end inner loop
-                if(min != i){
-                    temp = array[min];
-                    array[min] = array[i];
-                    array[i] = temp;
-                    exchanges++;
-                } //end if
->>>>>>> Stashed changes
         }// end outer loop
 
         System.out.println("=========================================================");
