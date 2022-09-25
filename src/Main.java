@@ -20,14 +20,12 @@ public class Main {
                 System.out.println("ERROR: Please add \".txt\" file extension to the file name.");
             }
         }
-
         //populates the array
         populateArray(fileName, data);
 
-        //clone array as not to reference
-        System.out.println(fileName);
-        //bubbleSort(fileName, data.clone());
-        //selectionSort(fileName, data.clone());
+        System.out.println("File: " + fileName);
+        bubbleSort(fileName, data.clone());
+        selectionSort(fileName, data.clone());
         insertionSort(fileName, data.clone());
     }
 
@@ -35,11 +33,11 @@ public class Main {
         File file = new File(path);
         Scanner scanner = new Scanner(file);
 
-        System.out.println(path + " data set: "); //debug
+        //System.out.println(path + " data set: "); //debug
 
         for (int j = 0; j < array.length; j++){
             array[j] = scanner.nextInt();
-            System.out.println("Index: " + j + " number: " + array[j]); //debug
+            //System.out.println("Index: " + j + " number: " + array[j]); //debug
         }
     }
     public static void writeFile(String path, int[] array) {
@@ -61,12 +59,20 @@ public class Main {
     public static void selectionSort(String fileName, int[] array) {
         int temp, minIndex, exchanges = 0, comparisons = 0;
         int n = array.length;
+        //boolean isSorted = false;
+
+        //debug prototype-reverse.txt
+        System.out.println("Before: ");
+        for (int k: array) { System.out.print(k + " ");}
+        System.out.println("");
 
         for (int i = 0; i < n-1; i++) {
-
+           // isSorted = true;
             minIndex = i;
+            System.out.println("Pass " + (i+1) + ": ");
             for (int j = i + 1; j < n; j++) {
                 comparisons++;
+                //System.out.print("Iteration " + j + ": ");
                 if (array[j] < array[minIndex]) {
                     minIndex = j;
                 } //end if
@@ -76,8 +82,21 @@ public class Main {
                 array[minIndex] = array[i];
                 array[i] = temp;
                 exchanges++;
-            } //end if
+                for (int k: array) { System.out.print(k + " ");}
+                System.out.print(" exchange successful. count = " + exchanges);
+                System.out.println("");
+            } else{
+                for (int k: array) { System.out.print(k + " ");}
+                System.out.print(" no exchange performed.");
+                System.out.println("");
+            }//end if
+            System.out.println("Current # of comparisons " + comparisons);
         }// end outer loop
+
+        //debug
+        System.out.println("After: ");
+        for (int k: array) { System.out.print(k + " ");}
+        System.out.println("");
 
         System.out.println("=========================================================");
         System.out.println("Selection Sort");
@@ -86,7 +105,26 @@ public class Main {
         System.out.println("=========================================================");
         writeFile("selection-" + fileName, array);
         } // end selection sort
+    public static void homework1(){
+        int n= 2000;
+        int x = 1;
+        int y;
+        int count = 0;
+        int z = n*n;
+        do {
+            y = n;
+            while (y > 0) {
+                System.out.println("y = " + y);
+                y = y - 1;
+                count = count + 3;
+            }
+            x = x + x;
+            System.out.println("x = " + x);
+            System.out.println("z = " + z);
+        }while(x < z);
 
+        System.out.println(count);
+    }
     public static void bubbleSort(String fileName, int[] array){
         int temp, comparisons = 0, exchanges = 0, n = array.length;
         boolean isSorted;
@@ -123,6 +161,7 @@ public class Main {
             if(isSorted)
                 break;
         } // end outer loop
+
         //debug
         System.out.println("After: ");
         for (int k: array) { System.out.print(k + " ");}
@@ -140,17 +179,35 @@ public class Main {
         int temp, comparisons = 0, exchanges = 0;
         int n = array.length;
 
+        //debug prototype-reverse.txt
+        System.out.println("Before: ");
+        for (int k: array) { System.out.print(k + " ");}
+        System.out.println("");
+
         for(int i = 1; i < n; i++){
             temp = array[i];
             int j = i - 1;
+            System.out.println("Pass " + i + ", temp = " + temp);
             while(j >= 0 && array[j] > temp){
                 array[j + 1] = array[j];
                 j--;
                 exchanges++;
                 comparisons++;
+
+                for (int k: array) { System.out.print(k + " ");}
+                System.out.print(" exchange successful. count = " + exchanges);
+                System.out.println("");
             } //end while loop
             array[j+1] = temp;
+            for (int k: array) { System.out.print(k + " ");}
+            System.out.print(" exchange successful. count = " + exchanges);
+            System.out.println("");
         } //end loop
+
+        //debug
+        System.out.println("After: ");
+        for (int k: array) { System.out.print(k + " ");}
+        System.out.println("");
 
         System.out.println("=========================================================");
         System.out.println("Insertion Sort");
